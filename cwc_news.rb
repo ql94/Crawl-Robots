@@ -38,6 +38,13 @@ while !should_stop do
 		parser = ACHTMLNodeParser.new(doc.xpath('//*[@id="zoom"]'), base_url)
 		parser.parse
 		news_date = news_date + ' ' + DateTime.now.to_time.to_s.split(' ')[1]
+		if news_date[5]!=1 
+			news_date = news_date[0..4]+'0'+news_date[5..-1];
+		end
+		if news_date[8]!=1 
+			news_date = news_date[0..7]+'0'+news_date[8..-1];
+		end
+		
 		obj = {
 			"title" => news_title,
 			"link" => news_link,
