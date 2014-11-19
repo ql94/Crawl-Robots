@@ -13,7 +13,7 @@ base_url = 'http://jwc.hit.edu.cn/news/'
 should_stop = false
 stop_index = 0
 stop_link = nil
-filePath = 'jwc.hit.edu.cn/news/last_update.json'
+filePath = 'jwc/last_update.json'
 if File.exist?filePath
 	file = File.read(filePath, :encoding => 'UTF-8')
 	last_update = JSON.parse(file)
@@ -39,6 +39,12 @@ while !should_stop do
 		parser = ACHTMLNodeParser.new(doc.xpath('//*[@id="zoom"]'), base_url)
 		parser.parse
 		news_date = news_date +' '+ DateTime.now.to_time.to_s.split(' ')[1]
+		if news_date[5]!=1 
+			news_date = news_date[0..4]+'0'+news_date[5..-1];
+		end
+		if news_date[8]!=1 
+			news_date = news_date[0..7]+'0'+news_date[8..-1];
+		end
 		news_title = news_title.gsub('/', '-')
 		obj = {
 			"title" => news_title,
