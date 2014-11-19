@@ -12,7 +12,7 @@ base_url = 'http://sme.hit.edu.cn/news/'
 should_stop = false
 stop_index = 0
 stop_link = nil
-filePath = 'sme.hit.edu.cn/news/last_update.json'
+filePath = 'sme/last_update.json'
 if File.exist?filePath
 	file = File.read(filePath, :encoding => 'UTF-8')
 	last_update = JSON.parse(file)
@@ -38,7 +38,13 @@ while !should_stop do
 		doc = Nokogiri::HTML(news_page.body, nil, 'gb2312')
 		parser = ACHTMLNodeParser.new(doc.xpath('//*[@id="container"]/table/tr/td[2]/table/tr[2]/td/table/tr[2]'), base_url)
 		parser.parse
-		news_date = news_date.gsub('/', '-') + ' ' + DateTime.now.to_time.to_s.split(' ')[1]
+		news_date = news_date.gsub('/', '-')
+		if news_date[5]!=1 
+			news_date = news_date[0..4]+'0'+news_date[5..-1];
+		end
+		if news_date[8]!=1 
+			news_date = news_date[0..7]+'0'+news_date[8..-1];
+		end
 		obj = {
 			"title" => news_title,
 			"link" => news_link,
